@@ -34,7 +34,7 @@ else:
 q_hist = []
 uncertainty = 25
 # ----------------------------- TODO -----------------------------
-def kalman_filter(sa,uncertainty,window=20,scale_lim=(0.01, 100),eta=0.3,gate_threshold=13.82):
+def kalman_filter(sa,uncertainty,window=20,scale_lim=(0.01, 100),eta=0.1,gate_threshold=13.82):
     global est,q_hist
     q = 1
     first = np.flatnonzero(valid == 1)[0]
@@ -86,7 +86,6 @@ def kalman_filter(sa,uncertainty,window=20,scale_lim=(0.01, 100),eta=0.3,gate_th
                     #print(f"mean_nis: {mean_nis:.3f}, q: {q:.3f}")
                     r = mean_nis / 2
                     q = float(np.clip(q * r**eta, scale_lim[0], scale_lim[1]))
-                    nis_buffer.clear()
                 kalman_gain = P_pred @ H.T @ np.linalg.inv(innovation_cov)
                 x = x_pred + kalman_gain @ innovation
                 P = (np.eye(4) - kalman_gain @ H) @ P_pred
@@ -98,7 +97,7 @@ def kalman_filter(sa,uncertainty,window=20,scale_lim=(0.01, 100),eta=0.3,gate_th
 
 sa = 1.2
 
-kalman_filter(sa,uncertainty,window=15,scale_lim=(0.01, 10),eta=3,gate_threshold=13.82)
+kalman_filter(sa,uncertainty,window=15,scale_lim=(0.01, 10),eta=0.1,gate_threshold=13.82)
 
 # -----------------------------------------------------------------
 
