@@ -76,7 +76,6 @@ def kalman_filter(sa,uncertainty,window=20,scale_lim=(0.01, 10),eta=0.3):
                 #print(f"mean_nis: {mean_nis:.3f}, q: {q:.3f}")
                 r = mean_nis / 2
                 q = float(np.clip(q * r**eta, 0.1, 10))
-                nis_buffer.clear()
             kalman_gain = P_pred @ H.T @ np.linalg.inv(innovation_cov)
             x = x_pred + kalman_gain @ innovation
             P = (np.eye(4) - kalman_gain @ H) @ P_pred
@@ -88,7 +87,7 @@ def kalman_filter(sa,uncertainty,window=20,scale_lim=(0.01, 10),eta=0.3):
 
 sa = .9
 
-kalman_filter(sa,uncertainty,window=20,scale_lim=(0.01, 10),eta=3)
+kalman_filter(sa,uncertainty,window=20,scale_lim=(0.01, 10),eta=0.1)
 
 #rint(q_hist[-1])
 
